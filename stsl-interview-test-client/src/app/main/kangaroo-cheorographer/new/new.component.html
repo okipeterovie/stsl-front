@@ -1,0 +1,93 @@
+<div class="card">
+
+  <br>
+  <br>
+
+  <div class="col text-center">
+    <button type="button" (click)="goBack()" class="btn btn-secondary">Go Back</button>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="card-body">
+    <form [formGroup]="kangarooForm" (ngSubmit)="doSubmit()">
+      <div class="row">
+        <div class="col">
+          <label for="position1" class="form-label">Position of the First Kangaroo:</label>
+          <input type="number" class="form-control" formControlName="position1"
+            placeholder="Position of the First Kangaroo" aria-label="Position of the First Kangaroo">
+        </div>
+
+        <div class="col">
+          <label for="velocity1" class="form-label">Velocity of the First Kangaroo:</label>
+          <input type="number" class="form-control" formControlName="velocity1"
+            placeholder="Velocity of the First Kangaroo" aria-label="Velocity of the First Kangaroo">
+        </div>
+      </div>
+
+      <br>
+      <br>
+
+      <div class="row">
+        <div class="col">
+          <label for="position2" class="form-label">Position of the Second Kangaroo:</label>
+          <input type="number" class="form-control" formControlName="position2"
+            placeholder="Position of the Second Kangaroo" aria-label="Position of the Second Kangaroo">
+        </div>
+
+        <div class="col">
+          <label for="velocity2" class="form-label">Velocity of the Second Kangaroo:</label>
+          <input type="number" class="form-control" formControlName="velocity2"
+            placeholder="Velocity of the Second Kangaroo" aria-label="Velocity of the Second Kangaroo">
+        </div>
+      </div>
+
+      <br>
+      <br>
+
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" [disabled]="loading || kangarooForm.invalid">Submit</button>
+      </div>
+
+      <app-progress-spinner [isLoading]="loading"></app-progress-spinner>
+    </form>
+
+  </div>
+
+  <div class="card-body" *ngIf="displayReport">
+    {{dataFromBack?.check}}, it is <span *ngIf="dataFromBack?.check == 'NO'">not</span> possible get both kangaroos at
+    the same location at
+    the same time as part of the show
+  </div>
+
+  <div class="card-body" *ngIf="displayReport && dataFromBack.patternDtos != null">
+
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered dom-jQuery-events">
+        <thead>
+          <tr>
+            <th>S/N </th>
+            <th>Position of First Kangaroo</th>
+            <th>Position of Second Kangaroo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let position of localListOfPosition | slice: (tablePage-1) * tablePageSize : (tablePage-1) * tablePageSize + tablePageSize; let i = index;">
+            <td *ngIf="i==0">Initial Position </td>
+            <td *ngIf="i>0">Jump {{i}}</td>
+            <td>{{position.position1}}</td>
+            <td>{{position.position2}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ngb-pagination class="d-flex flex-wrap justify-content-center" [(page)]="tablePage" [pageSize]="tablePageSize"
+        [collectionSize]="localListOfPosition.length" [rotate]="true" [boundaryLinks]="true">
+      </ngb-pagination>
+    </div>
+  </div>
+
+
+</div>
